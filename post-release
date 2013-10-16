@@ -6,7 +6,6 @@ read -d '' runner <<'EOF'
 
 set -e
 export HOME=/app
-for file in \$HOME/.profile.d/*; do source \$file; done
 hash -r
 cd \$HOME
 
@@ -21,7 +20,7 @@ while read line || [ -n "\$line" ]; do
   command=\${line#*: }
   cat << CONF >> supervisord.conf
 [program:\${name}]
-command=sh -c "\${command}"
+command=/exec sh -c "\${command}"
 autostart=true
 autorestart=true
 stopsignal=QUIT
