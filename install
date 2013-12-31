@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Build docker image
+docker build -q=true -t yuvadm/supervisord github.com/yuvadm/dokku-supervisord-dockerfiles
