@@ -44,7 +44,11 @@ fi
 
 echo "-----> Injecting Supervisor ..."
 
-id=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "cat > /start && apt-get update && apt-get install -y supervisor && apt-get clean")
+cmd="cat > /start && \
+  dpkg -s supervisor > /dev/null 2>&1 || \
+  (apt-get update && apt-get install -y supervisor && apt-get clean)"
+
+id=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$cmd")
 docker attach $id
 test $(docker wait $id) -eq 0
 docker commit $id $IMAGE > /dev/null
