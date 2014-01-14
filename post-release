@@ -36,6 +36,12 @@ EOF
 
 set -e
 
+# Check for Procfile
+id=$(docker run -d $IMAGE test -f app/Procfile)
+if [ $(docker wait $id) -ne 0 ]; then
+  exit 0
+fi
+
 echo "-----> Injecting Supervisor ..."
 
 id=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "cat > /start && apt-get update && apt-get install -y supervisor && apt-get clean")
