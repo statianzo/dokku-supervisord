@@ -37,18 +37,18 @@ EOF
 set -e
 
 # Check for Procfile
-id=$(docker run -d $IMAGE test -f app/Procfile)
-if [ $(docker wait $id) -ne 0 ]; then
+ID=$(docker run -d $IMAGE test -f app/Procfile)
+if [ $(docker wait $ID) -ne 0 ]; then
   exit 0
 fi
 
 echo "-----> Injecting Supervisor ..."
 
-cmd="cat > /start && \
+CMD="cat > /start && \
   dpkg -s supervisor > /dev/null 2>&1 || \
   (apt-get update && apt-get install -y supervisor && apt-get clean)"
 
-id=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$cmd")
-docker attach $id
-test $(docker wait $id) -eq 0
-docker commit $id $IMAGE > /dev/null
+ID=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
+docker attach $ID
+test $(docker wait $ID) -eq 0
+docker commit $ID $IMAGE > /dev/null
