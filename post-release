@@ -49,6 +49,5 @@ CMD="cat > /start && \
   (apt-get update && apt-get install -y supervisor && apt-get clean)"
 
 ID=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
-docker attach $ID
 test $(docker wait $ID) -eq 0
 docker commit $ID $IMAGE > /dev/null
