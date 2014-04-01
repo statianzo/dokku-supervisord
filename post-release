@@ -15,7 +15,7 @@ loglevel=debug
 nodaemon=true
 CONF
 
-while read line || [ -n "\$line" ]; do
+while read line && [[ "\$line" =~ ^([A-Za-z0-9_-]+):\s*(.+)$ ]]; do
   name=\${line%%:*}
   command=\${line#*: }
   cat << CONF >> supervisord.conf
