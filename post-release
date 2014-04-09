@@ -15,10 +15,13 @@ loglevel=debug
 nodaemon=true
 CONF
 
-while read line || [ -n "\$line" ]; do
-  name=\${line%%:*}
-  command=\${line#*: }
-  cat << CONF >> supervisord.conf
+while read line
+do
+  if [[ "\$line" =~ ^([A-Za-z0-9_-]+):\s*(.+)$ ]]
+  then
+    name=\${line%%:*}
+    command=\${line#*: }
+    cat << CONF >> supervisord.conf
 [program:\${name}]
 command=/exec sh -c "\${command}"
 autostart=true
@@ -26,7 +29,7 @@ autorestart=true
 stopsignal=QUIT
 
 CONF
-
+  fi
 done < "Procfile"
 
 
