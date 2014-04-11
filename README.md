@@ -16,11 +16,18 @@ git clone https://github.com/statianzo/dokku-supervisord.git /var/lib/dokku/plug
 
 All future deployments will use supervisord to start all processes.
 
+## Docker 0.10 support
+
+dokku-supervisord v0.3.0 changed the expected namespace from "app" to "dokku"
+to support Docker 0.10. See details within the [dokku issue][docker10]. If
+you're using a dokku version from before [this commit][docker10commit], stick
+with v0.2.x of dokku-supervisord.
+
 ## License
 
 The MIT License (MIT)
 
-Copyright (c) 2013 Jason Staten
+Copyright (c) 2013-2014 Jason Staten
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,3 +49,5 @@ SOFTWARE.
 
 [dokku]: https://github.com/progrium/dokku
 [super]: http://supervisord.org
+[docker10]: https://github.com/progrium/dokku/issues/533
+[docker10commit]: https://github.com/progrium/dokku/commit/2474844856ab5c53398005ebc455eb53676ac5d5
