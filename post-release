@@ -15,7 +15,7 @@ loglevel=debug
 nodaemon=true
 CONF
 
-while read line
+while read line || [ -n "\$line" ]
 do
   if [[ "\$line" =~ ^([A-Za-z0-9_-]+):\s*(.+)$ ]]
   then
