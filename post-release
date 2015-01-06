@@ -5,7 +5,13 @@ read -d '' runner <<'EOF'
 #!/bin/bash
 
 set -e
-export HOME=/app
+app_dir=/app
+user_name=$(grep -o '^u[0-9]\{4,5\}' /etc/passwd)
+: ${user_name:="www-data"}
+
+export HOME=$app_dir
+chown -R $user_name:$user_name $app_dir
+
 hash -r
 cd \$HOME
 
@@ -34,7 +40,7 @@ done < "Procfile"
 
 
 
-supervisord -c supervisord.conf
+setuidgid $user_name supervisord -c supervisord.conf
 EOF
 
 set -e
