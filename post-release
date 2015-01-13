@@ -54,6 +54,7 @@ fi
 echo "-----> Injecting Supervisor ..."
 
 CMD="cat > /start && \
+  chmod +x /start && \
   dpkg -s supervisor > /dev/null 2>&1 || \
   (apt-get update && apt-get install -y supervisor && apt-get clean)"
 
