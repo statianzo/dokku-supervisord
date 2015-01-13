@@ -6,7 +6,7 @@ read -d '' runner <<'EOF'
 
 set -e
 app_dir=/app
-user_name=$(grep -o '^u[0-9]\{4,5\}' /etc/passwd)
+user_name=$(grep -o '^u[0-9]\\{4,5\\}' /etc/passwd)
 : ${user_name:="www-data"}
 
 export HOME=$app_dir
