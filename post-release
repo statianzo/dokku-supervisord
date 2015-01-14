@@ -1,7 +1,21 @@
 #!/bin/bash
 APP="$1"; IMAGE="dokku/$APP"
 
-read -d '' runner <<'EOF'
+
+read -d '' exec_runner <<'EOF'
+#!/bin/bash
+
+set -e
+app_dir=/app
+export HOME=$app_dir
+cd \$HOME
+
+for file in .profile.d/*; do source \$file; done
+hash -r
+"\$@"
+EOF
+
+read -d '' start_runner <<'EOF'
 #!/bin/bash
 
 set -e
@@ -51,12 +65,28 @@ if [ $(docker wait $ID) -ne 0 ]; then
   exit 0
 fi
 
-echo "-----> Injecting Supervisor ..."
+echo "-----> Preparing Supervisor ..."
 
-CMD="cat > /start && \
+CMD="rm /exec && \
   dpkg -s supervisor > /dev/null 2>&1 || \
   (apt-get update && apt-get install -y supervisor && apt-get clean)"
 
-ID=$(echo "$runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
+ID=$(docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
+test $(docker wait $ID) -eq 0
+docker commit $ID $IMAGE > /dev/null
+
+echo "-----> Injecting Supervisor ..."
+
+CMD="cat > /exec && \
+  chmod +x /exec"
+
+ID=$(echo "$exec_runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
+test $(docker wait $ID) -eq 0
+docker commit $ID $IMAGE > /dev/null
+
+CMD="cat > /start && \
+  chmod +x /start"
+
+ID=$(echo "$start_runner" | docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
 test $(docker wait $ID) -eq 0
 docker commit $ID $IMAGE > /dev/null
