@@ -69,7 +69,7 @@ echo "-----> Preparing Supervisor ..."
 
 CMD="rm /exec && \
   dpkg -s supervisor > /dev/null 2>&1 || \
-  (apt-get update && apt-get install -y supervisor && apt-get clean)"
+  (apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*)"
 
 ID=$(docker run -i -a stdin $IMAGE /bin/bash -c "$CMD")
 test $(docker wait $ID) -eq 0

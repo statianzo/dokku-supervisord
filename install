@@ -3,7 +3,7 @@ set -e
 
 IMAGE="progrium/buildstep"
 
-CMD="apt-get update && apt-get install -y supervisor && apt-get clean"
+CMD="apt-get update && apt-get install -y supervisor && rm -rf /var/lib/apt/lists/*"
 
 ID=$(docker run -d $IMAGE /bin/sh -c "$CMD")
 docker attach $ID
