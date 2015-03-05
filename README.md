@@ -17,6 +17,10 @@ dokku plugins-install
 
 All future deployments will use supervisord to start all processes.
 
+## v0.4.0 breaking change
+
+v0.4.0 renamed the `post-release` to `post-build-buildstep` to keep compatibility with upstream dokku. If you're using an older version of dokku, be sure to pin your version to v0.3.x.
+
 ## Docker 0.10 support
 
 dokku-supervisord v0.3.0 changed the expected namespace from "app" to "dokku"
