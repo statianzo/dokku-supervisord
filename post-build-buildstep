@@ -52,6 +52,15 @@ CONF
   fi
 done < "Procfile"
 
+cat << CONF >> supervisord.conf
+[unix_http_server]
+file=/tmp/supervisor.sock
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+[supervisorctl]
+serverurl=unix:///tmp/supervisor.sock
+
+CONF
 
 
 setuidgid $user_name supervisord -c supervisord.conf
