@@ -8,6 +8,10 @@ Normally, dokku only runs the `web` process within Procfile. The
 dokku-supervisord plugin will run all process types (web, worker, etc.) and
 will restart crashed applications.
 
+# Not compatible with dokku 0.4+
+
+As of dokku 0.4, plugins require a `plugin.toml` file. dokku-supervisord will not install correctly. Also, the functionality of multiple proceses and restarting is built into dokku now and should not require a plugin. See [issue #30](https://github.com/statianzo/dokku-supervisord/issues/30) for details. If you're still interested in using supervisord past dokku 0.4 check out [dokku-logging-supervisord](https://github.com/sehrope/dokku-logging-supervisord).
+
 ## Installation
 
 ```sh
